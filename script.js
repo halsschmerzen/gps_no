@@ -2,10 +2,10 @@
 // Können je nach Bedarf geändert werden
 // Eventuell füge ich eine Funktion hinein die nach Klick die Nodes bestimmt
 const nodes = [
-    [110, 240],
-    [220, 100],
-    [400, 50],
-    [650, 100]
+    [0, 0],
+    [20, 20],
+    [40, 40],
+    [60, 60]
 ];
 
 // Speichert den Container div als Konstante
@@ -13,7 +13,7 @@ const container = document.getElementById("container");
 
 // Malt die "Nodes" => hab sie Kästchen genannt, fand das irgendwie süßer :)
 
-function drawKaestchen(xPos, yPos) {
+function drawKaestchen(xPos, yPos) {    
     // Erstell ein kaestchen Element
     // Styling ist rot, kann in style.css bearbeitet werden
     const kaestchen = document.createElement('div');
@@ -46,6 +46,32 @@ console.log(coords);
 // Man sollte meinen CSS reicht dafür, jedoch ist der DIV kleiner als die jeweiligen Elemente drin
 // Lässt sich bestimmt optimieren => TODO? 
 
+//Funktion die die Distanz von A->B B->C C->D und D->A berechnet
+function gibDistanz(nodes) {
+    // Array für die Distanzen
+    let distanzen = [];
+
+    //Iteriere durch alle Nodes
+
+    for(let i = 0; i < nodes.length; i++) {
+        // Determiniert den nächsten Index aus dem Array
+        // Bisschen wie eine zyklische Gruppe - wenn wir am Ende sind dann D-> A
+        let nextIndex = i + 1 === nodes.length ? 0 : i + 1;
+        // aktueller Node
+        let nodeA = nodes[i];
+        // nächster Node
+        let nodeB = nodes[nextIndex];
+        // Kalkulation für die jeweilige Distanz der Nodes
+        // SQRT((x2-x1)² + (y2-y1)²)
+        let distanz = Math.sqrt(Math.pow(nodeB[0]-nodeA[0],2) + Math.pow(nodeB[1]-nodeA[1], 2));
+        distanzen.push(distanz);
+    }
+
+    return distanzen;
+}
+
+
+
 function zeichneBox(nodes) {
 
     const box = document.createElement('div');
@@ -55,8 +81,9 @@ function zeichneBox(nodes) {
     box.style.position = 'absolute';
     box.style.left = minX + 'px';
     box.style.top = minY + 'px';
-    box.style.width = maxX-minX + 'px';
-    box.style.height = maxY + 'px';
+    // +8 wird gerechnet, da die Nodes an sich größer dargestellt werden, als sie von HTML/CSS wahrgenommen werden
+    box.style.width = maxX-minX+8 + 'px';
+    box.style.height = maxY-minY+8 + 'px';
 
     box.style.border = '2px solid black';
 
@@ -64,7 +91,9 @@ function zeichneBox(nodes) {
 
 }
 
-zeichneBox(nodes)
 
+
+zeichneBox(nodes)
+console.log(gibDistanz(nodes))
 //Zeichnet alle Kästchen zu guter Letzt
 nodes.forEach(nodes => drawKaestchen(...nodes));
