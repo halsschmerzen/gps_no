@@ -2,14 +2,29 @@
 // Können je nach Bedarf geändert werden
 // Eventuell füge ich eine Funktion hinein die nach Klick die Nodes bestimmt
 const nodes = [
-  [100,100],
-  [300, 110],
-  [500, 500],
-  [110, 300],
+  [200,300],
+  [700, 510],
+  [500, 800],
+  [110, 200],
 ];
+
 
 // Speichert den Container div als Konstante
 const container = document.getElementById("container");
+
+// Einfache Funktion die die aktuelle Position der Nodes im HTML Dokument schreibt
+function schreibNodePos(nodes) {
+    // Super repetitive, kann besser gemacht werden, aber funktioniert fürs erste
+    const posA = document.getElementById("posA");
+    const posB = document.getElementById("posB");
+    const posC = document.getElementById("posC");
+    const posD = document.getElementById("posD");
+
+    posA.textContent = "Position von Node A: " + nodes[0];
+    posB.textContent = "Position von Node B: " + nodes[1];
+    posC.textContent = "Position von Node C: " + nodes[2];
+    posD.textContent = "Position von Node D: " + nodes[3];
+}
 
 // Malt die "Nodes" => hab sie Kästchen genannt, fand das irgendwie süßer :)
 
@@ -93,7 +108,9 @@ function zeichneBox(nodes) {
 const mobilerNode = document.createElement("div");
 mobilerNode.classList.add("kaestchen");
 container.appendChild(mobilerNode);
+
 //eigentlich eine Kopie von der orginalen gibDistanz-Methode, implementiere die VORERST 2x trotzdem
+// Braucht Improvement
 function gibDistanzZuMobileNode(mobileNode, nodes) {
     let distanzen = [];
 
@@ -144,14 +161,11 @@ function mobileNode() {
     textC.textContent = "Distanz zu Node C: " + gibDistanzZuMobileNode(mobileNode, nodes)[2];
     textD.textContent = "Distanz zu Node D: " + gibDistanzZuMobileNode(mobileNode, nodes)[3];
 
-
-
-
-    console.log(gibDistanzZuMobileNode(mobileNode, nodes));
+    // console.log(gibDistanzZuMobileNode(mobileNode, nodes));
   });
 }
-
-
+// Super messy Funktionaufruf -> braucht Improvement
+schreibNodePos(nodes);
 zeichneBox(nodes);
 console.log(gibDistanz(nodes));
 //Zeichnet alle Kästchen zu guter Letzt
