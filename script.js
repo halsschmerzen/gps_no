@@ -90,6 +90,26 @@ function zeichneBox(nodes) {
 }
 
 //Funktion der einen mobilen Node anhand der aktuellen Mausposition zeichnet
+const mobilerNode = document.createElement("div");
+mobilerNode.classList.add("kaestchen");
+container.appendChild(mobilerNode);
+//eigentlich eine Kopie von der orginalen gibDistanz-Methode, implementiere die VORERST 2x trotzdem
+function gibDistanzZuMobileNode(mobileNode, nodes) {
+    let distanzen = [];
+
+    let mobileX = parseInt(mobilerNode.style.left);
+    let mobileY = parseInt(mobilerNode.style.top);
+
+    for(let i = 0; i < nodes.length; i++) {
+        let node = nodes[i];
+
+        let distanz = Math.sqrt(Math.pow(node[0]-mobileX,2) + Math.pow(node[1]-mobileY, 2));
+
+        distanzen.push(distanz);
+    }
+
+    return distanzen;
+}
 
 function mobileNode() {
   //Da die schwarze Box nicht richtig funktioniert
@@ -98,9 +118,7 @@ function mobileNode() {
 
   let { minX, minY, maxX, maxY } = gibMinMaxCoords(nodes);
 
-  const mobileNode = document.createElement("div");
-  mobileNode.classList.add("kaestchen");
-  container.appendChild(mobileNode);
+
 
   document.addEventListener("mousemove", function (event) {
     // berechne die neue Position nach jeder Mausbewegung
@@ -110,11 +128,29 @@ function mobileNode() {
     //  Super langsam, muss verbessert werden, aber funktioniert! :D
 
     if (newX >= minX && newX <= maxX && newY >= minY && newY <= maxY) {
-      mobileNode.style.left = newX + "px";
-      mobileNode.style.top = newY + "px";
+      mobilerNode.style.left = newX + "px";
+      mobilerNode.style.top = newY + "px";
     }
+
+    //Nutzt die gibDistanzZuMobileNode Funktion um bei jeder  Bewegung die Distnaz der Hardcoded Nodes zu updaten
+
+    let textA = document.getElementById("A");
+    let textB = document.getElementById("B");
+    let textC = document.getElementById("C");
+    let textD = document.getElementById("D");
+
+    textA.textContent = "Distanz zu Node A: " + gibDistanzZuMobileNode(mobileNode, nodes)[0];
+    textB.textContent = "Distanz zu Node B: " + gibDistanzZuMobileNode(mobileNode, nodes)[1];
+    textC.textContent = "Distanz zu Node C: " + gibDistanzZuMobileNode(mobileNode, nodes)[2];
+    textD.textContent = "Distanz zu Node D: " + gibDistanzZuMobileNode(mobileNode, nodes)[3];
+
+
+
+
+    console.log(gibDistanzZuMobileNode(mobileNode, nodes));
   });
 }
+
 
 zeichneBox(nodes);
 console.log(gibDistanz(nodes));
@@ -122,3 +158,4 @@ console.log(gibDistanz(nodes));
 nodes.forEach((nodes) => drawKaestchen(...nodes));
 
 mobileNode();
+
