@@ -1,0 +1,18 @@
+.drawer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+}
+
+.kaestchen {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+}
+
+#container {
+    position: relative;
+}
