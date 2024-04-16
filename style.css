@@ -5,7 +5,10 @@
 }
 
   
-
+.divs {
+    margin-left: 0.25rem;
+    font-family:'Courier New', Courier, monospace;
+}
   
 .drawer {
     position: absolute;
