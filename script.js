@@ -62,14 +62,10 @@ function gibMinMaxCoords(nodes) {
 
   return { minX, minY, maxX, maxY };
 }
+//Globaler Wert der das min/max von X und Y speichert.
+let { minX, minY, maxX, maxY } = gibMinMaxCoords(nodes);
 
-// Kurzer Test ob die Koordinaten korrekt ausgegeben werden (ja werden sie)
-let coords = gibMinMaxCoords(nodes);
-console.log(coords);
 
-// Funktion die eine schwarze Box abhängig von den Koordinaten zeichnet
-// Man sollte meinen CSS reicht dafür, jedoch ist der DIV kleiner als die jeweiligen Elemente drin
-// Lässt sich bestimmt optimieren => TODO?
 
 //Funktion die die Distanz von A->B B->C C->D und D->A berechnet
 function gibDistanz(nodes) {
@@ -96,11 +92,11 @@ function gibDistanz(nodes) {
 
   return distanzen;
 }
-
+// Funktion die eine schwarze Box abhängig von den Koordinaten zeichnet
+// Man sollte meinen CSS reicht dafür, jedoch ist der DIV kleiner als die jeweiligen Elemente drin
+// Lässt sich bestimmt optimieren => TODO?
 function zeichneBox(nodes) {
   const box = document.createElement("div");
-
-  let { minX, minY, maxX, maxY } = gibMinMaxCoords(nodes);
 
   box.style.position = "absolute";
   box.style.left = minX + "px";
@@ -151,14 +147,11 @@ function zeichneKreis(node, radius) {
   document.body.appendChild(kreis);
 }
 
+
 function mobileNode() {
   //Da die schwarze Box nicht richtig funktioniert
   //Implementiere ich eine Funktion die Anhand gibMinmaxCoords schaut
   // dass die Maus nicht außerhalb der Box geht.
-
-  let { minX, minY, maxX, maxY } = gibMinMaxCoords(nodes);
-
-
 
   document.addEventListener("mousemove", function (event) {
     // berechne die neue Position nach jeder Mausbewegung
@@ -168,10 +161,13 @@ function mobileNode() {
     let distanzen = gibDistanzZuMobileNode(mobileNode, nodes);
     //Holt sich die gezeichneten Kreise
     let existingKreise = document.getElementsByClassName("kreis");
+
     //Solange es ein erstes Element gibt => lösche das Alte
     while(existingKreise[0]) {
       existingKreise[0].parentNode.removeChild(existingKreise[0]);
     }
+
+
     //Zeichne die Kreise
     for(let i = 0; i < nodes.length; i++) {
       zeichneKreis(nodes[i], distanzen[i]);
@@ -195,8 +191,6 @@ function mobileNode() {
     textB.textContent = "Distanz zu Node B: " + gibDistanzZuMobileNode(mobileNode, nodes)[1];
     textC.textContent = "Distanz zu Node C: " + gibDistanzZuMobileNode(mobileNode, nodes)[2];
     textD.textContent = "Distanz zu Node D: " + gibDistanzZuMobileNode(mobileNode, nodes)[3];
-
-    // console.log(gibDistanzZuMobileNode(mobileNode, nodes));
   });
 }
 // Super messy Funktionaufruf -> braucht Improvement
