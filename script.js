@@ -128,6 +128,19 @@ function gibDistanzZuMobileNode(mobileNode, nodes) {
     return distanzen;
 }
 
+function zeichneKreis(node, radius) {
+  const kreis = document.createElement("div");
+  kreis.classList.add("kreis");
+  kreis.style.position = "absolute";
+  kreis.style.border = "1px solid green";
+  kreis.style.borderRadius = "50%";
+  kreis.style.width = (radius * 2) + "px";
+  kreis.style.height = (radius * 2) + "px";
+  kreis.style.left = (node[0] - radius) + "px";
+  kreis.style.top = (node[1] - radius) + "px";
+  document.body.appendChild(kreis);
+}
+
 function mobileNode() {
   //Da die schwarze Box nicht richtig funktioniert
   //Implementiere ich eine Funktion die Anhand gibMinmaxCoords schaut
@@ -141,6 +154,18 @@ function mobileNode() {
     // berechne die neue Position nach jeder Mausbewegung
     let newX = event.clientX;
     let newY = event.clientY;
+    // Holt sich die Distanzen
+    let distanzen = gibDistanzZuMobileNode(mobileNode, nodes);
+    //Holt sich die gezeichneten Kreise
+    let existingKreise = document.getElementsByClassName("kreis");
+    //Solange es ein erstes Element gibt => lösche das Alte
+    while(existingKreise[0]) {
+      existingKreise[0].parentNode.removeChild(existingKreise[0]);
+    }
+    //Zeichne die Kreise
+    for(let i = 0; i < nodes.length; i++) {
+      zeichneKreis(nodes[i], distanzen[i]);
+    }
 
     //  Super langsam, muss verbessert werden, aber funktioniert! :D
 
