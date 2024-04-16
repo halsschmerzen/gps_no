@@ -134,9 +134,14 @@ function gibDistanzZuMobileNode(mobileNode, nodes) {
     return distanzen;
 }
 
+// Funktion die abhängig vom aktuellen Node, und den gegebenen Radius (Abstand zum mobilen Node) einen Kreis zeichnet
 function zeichneKreis(node, radius) {
+
+  // Erstelle ein div Element
   const kreis = document.createElement("div");
+  // Füge es zur Kreis-Klasse hinzu => Wichtig um später die alten Kreise zu löschen
   kreis.classList.add("kreis");
+  // CSS Styling
   kreis.style.position = "absolute";
   kreis.style.border = "1px solid green";
   kreis.style.borderRadius = "50%";
@@ -144,7 +149,39 @@ function zeichneKreis(node, radius) {
   kreis.style.height = (radius * 2) + "px";
   kreis.style.left = (node[0] - radius) + "px";
   kreis.style.top = (node[1] - radius) + "px";
+  // Füge es zur Klasse
   document.body.appendChild(kreis);
+}
+
+// Funktion die den Winkel vom mobilen Node zu einem Node kalkuliert
+function berechneWinkel(node, mobilerNode) {
+  // Aktuelle X und Y der mobilen Node zum Node
+  let dx = mobilerNode[0] - node[0];
+  let dy = mobilerNode[1]- node[1];
+  // Winkel (noch in Bogenmaß)
+  let winkel = Math.atan2(dy,dx);
+  // Rechne in Grad um
+  winkel *= 180/Math.PI;
+  // verhindert negative Werte
+  if(winkel<0) winkel = 360+winkel;
+  return winkel;
+}
+
+// Schreibt den Winkel in die HTML Divs (kann verbessert werden => Klassen in JS statt HTML)
+function schreibeWinkel() {
+
+  // Holt sich die Position des mobilenNodes
+  let mobilerNodePos = [parseInt(mobilerNode.style.left), parseInt(mobilerNode.style.top)];
+
+  nodes.forEach((node, index) => {
+    // Berechnet den Winkel
+      let winkel = berechneWinkel(node, mobilerNodePos);
+      // Schreibt sie in die DIVS abhängig von Namen "winkel{A-D}"
+      let winkelElement = document.getElementById(`winkel${String.fromCharCode('A'.charCodeAt(0)+index)}`);
+      winkelElement.textContent = `Winkel zu Node ${String.fromCharCode('A'.charCodeAt(0)+index)}: ${winkel}`;
+  });
+  
+
 }
 
 
@@ -167,6 +204,8 @@ function mobileNode() {
       existingKreise[0].parentNode.removeChild(existingKreise[0]);
     }
 
+    // Update den Winkel bei jeder Mausbewegung
+    schreibeWinkel();
 
     //Zeichne die Kreise
     for(let i = 0; i < nodes.length; i++) {
@@ -180,8 +219,9 @@ function mobileNode() {
       mobilerNode.style.top = newY + "px";
     }
 
+    
     //Nutzt die gibDistanzZuMobileNode Funktion um bei jeder  Bewegung die Distnaz der Hardcoded Nodes zu updaten
-
+    // Dieses nervige "document.getElementByID" ist nur vorläufig da, man kann das später in eine Klasse zusammenwerfen
     let textA = document.getElementById("A");
     let textB = document.getElementById("B");
     let textC = document.getElementById("C");
@@ -194,15 +234,17 @@ function mobileNode() {
   });
 }
 // Super messy Funktionaufruf -> braucht Improvement
+// Schreibt lediglich die Positionen aus der Nodes-Liste aus
 schreibNodePos(nodes);
+// Zeichnet die schwarze Box der Nodes
 zeichneBox(nodes);
-console.log(gibDistanz(nodes));
+
 //Zeichnet alle Kästchen zu guter Letzt
 // + Zeichnet Label (A-Z) zu den jeweiligen Nodes
 nodes.forEach((node, index) => {
   let label = String.fromCharCode('A'.charCodeAt(0)+index);
   drawKaestchen(node[0], node[1], label);
 });
-
+// Erstellt den mobilen Node
 mobileNode();
 
