@@ -2,10 +2,10 @@
 // Können je nach Bedarf geändert werden
 // Eventuell füge ich eine Funktion hinein die nach Klick die Nodes bestimmt
 const nodes = [
-  [200,300],
-  [700, 510],
+  [200,400],
+  [300, 510],
   [500, 800],
-  [110, 200],
+  [710, 500],
 ];
 
 
@@ -28,7 +28,16 @@ function schreibNodePos(nodes) {
 
 // Malt die "Nodes" => hab sie Kästchen genannt, fand das irgendwie süßer :)
 
-function drawKaestchen(xPos, yPos) {
+function drawKaestchen(xPos, yPos, label) {
+  //Erstelle ein Label Element um die Nodes von A-Z zu bezeichnen
+  const labelElement = document.createElement("div");
+  labelElement.textContent = label;
+  labelElement.style.position = "absolute";
+  labelElement.style.left = (xPos-10)+"px";
+  labelElement.style.top = (yPos-10)+"px";
+
+
+
   // Erstell ein kaestchen Element
   // Styling ist rot, kann in style.css bearbeitet werden
   const kaestchen = document.createElement("div");
@@ -38,6 +47,7 @@ function drawKaestchen(xPos, yPos) {
   kaestchen.style.top = yPos + "px";
   // Werf es in den Container div hinein!
   container.appendChild(kaestchen);
+  container.appendChild(labelElement);
 }
 
 // function die max/min von X und Y wiedergibt
@@ -194,7 +204,11 @@ schreibNodePos(nodes);
 zeichneBox(nodes);
 console.log(gibDistanz(nodes));
 //Zeichnet alle Kästchen zu guter Letzt
-nodes.forEach((nodes) => drawKaestchen(...nodes));
+// + Zeichnet Label (A-Z) zu den jeweiligen Nodes
+nodes.forEach((node, index) => {
+  let label = String.fromCharCode('A'.charCodeAt(0)+index);
+  drawKaestchen(node[0], node[1], label);
+});
 
 mobileNode();
 
